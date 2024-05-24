@@ -1,14 +1,14 @@
 from googleapiclient.discovery import build
 api_servicename='youtube'
 api_version='v3'
-API_Key='AIzaSyBp-njGSS_zilYoxrM7wL27Wkz2VjInAp4'
+API_Key='key'
 CHANNELID='UC4vgd34lbz4rMekxNfmxOIg'
 import json
 import re
 from datetime import datetime
 
 #API
-youtube=build('youtube','v3',developerKey='AIzaSyBp-njGSS_zilYoxrM7wL27Wkz2VjInAp4')
+youtube=build('youtube','v3',developerKey=API_Key)
 def channel_data(channel_id):
     request=youtube.channels().list(part='snippet,contentDetails,statistics',id=channel_id)
     response=request.execute()
@@ -154,8 +154,8 @@ import mysql.connector as db
 import pandas as pd
 #connection
 my_db=db.connect(host="localhost",
-                user="vino",
-                password="shastik@2901",
+                user="user1",
+                password="*****",
                 database="youtube")
 #cursor
 curr=my_db.cursor()
@@ -186,8 +186,8 @@ import mysql.connector as db
 import pandas as pd
 #connection
 my_db=db.connect(host="localhost",
-                user="vino",
-                password="shastik@2901",
+                user="user1",
+                password="****",
                 database="youtube")
 #cursor
 curr=my_db.cursor()
@@ -221,8 +221,8 @@ import mysql.connector as db
 import pandas as pd
 #connection
 my_db=db.connect(host="localhost",
-                user="vino",
-                password="shastik@2901",
+                user="user1",
+                password="****",
                 database="youtube")
 #cursor
 curr=my_db.cursor()
@@ -823,8 +823,8 @@ import json
 def create_connection():
     return db.connect(
         host="localhost",
-        user="vino",
-        password="shastik@2901",
+        user="user1",
+        password="****",
         database="youtube"
     )
 
@@ -884,8 +884,8 @@ elif page == "Comment Data":
 
 #sql connection
 my_db=db.connect(host="localhost",
-                user="vino",
-                password="shastik@2901",
+                user="user1",
+                password="****",
                 database="youtube")
 #cursor
 curr=my_db.cursor()
