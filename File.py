@@ -904,7 +904,6 @@ Question=st.selectbox("Select your Question",("1. All the Videos and Channel Nam
 if Question=="1. All the Videos and Channel Name":
     Query_1='''select title as videos,channel_name as channelname from videos_de'''
     curr.execute(Query_1)
-    my_db.commit()
     T1=curr.fetchall()
     df=pd.DataFrame(T1,columns=['Video Title','Channel Name'])
     st.write(df)
@@ -912,7 +911,6 @@ if Question=="1. All the Videos and Channel Name":
 elif Question=="2. Channels with most number of videos":
     Query_2='''select channel_name as channelname,total_videos as no_videos from Channel_det order by total_videos desc '''
     curr.execute(Query_2)
-    my_db.commit()
     T2=curr.fetchall()
     df2=pd.DataFrame(T2,columns=['Channel Name','No of Videos'])
     st.write(df2)
@@ -921,7 +919,6 @@ elif Question=="3. Top 10 Most Viewed Videos":
     Query_3='''select views as Views,channel_name as channelname,title as videotitle 
             from videos_de where views is not null order by views desc limit 10 '''
     curr.execute(Query_3)
-    my_db.commit()
     T3=curr.fetchall()
     df3=pd.DataFrame(T3,columns=['Views','Channel Name','Video Title'])
     st.write(df3)
@@ -929,7 +926,6 @@ elif Question=="3. Top 10 Most Viewed Videos":
 elif Question=="4. Comments in each Video":
     Query_4='''select comments as number_comments,title as videotitle from videos_de where comments is not null  '''
     curr.execute(Query_4)
-    my_db.commit()
     T4=curr.fetchall()
     df4=pd.DataFrame(T4,columns=['No of Comments','Video Title'])
     st.write(df4)
@@ -938,7 +934,6 @@ elif Question=="5. Videos with highest number of Likes":
     Query_5='''select title as videotitle,channel_name as channelname,likes as likecount 
             from videos_de where likes is not null order by likes desc  '''
     curr.execute(Query_5)
-    my_db.commit()
     T5=curr.fetchall()
     df5=pd.DataFrame(T5,columns=['Video Title','Channel Name','Likes Count'])
     st.write(df5)
@@ -946,7 +941,6 @@ elif Question=="5. Videos with highest number of Likes":
 elif Question=="6. Total Number of Likes for each videos":
     Query_6='''select likes as likecount,title as videotitle from videos_de  '''
     curr.execute(Query_6)
-    my_db.commit()
     T6=curr.fetchall()
     df6=pd.DataFrame(T6,columns=['Likes Count','Video Title'])
     st.write(df6)
@@ -954,7 +948,6 @@ elif Question=="6. Total Number of Likes for each videos":
 elif Question=="7. Viewscount of each channel":
     Query_7='''select channel_name as Channel Name,views as TotalViews from Channel_det '''
     curr.execute(Query_7)
-    my_db.commit()
     T7=curr.fetchall()
     df7=pd.DataFrame(T7,columns=['ChannelName','Views Count'])
     st.write(df7)
@@ -963,7 +956,6 @@ elif Question=="8. Videos published in the year of 2022":
     Query_8='''select title as Videotitle,published_date as videoPublishedDate,channel_name as ChannelName 
             from videos_de where extract(year from published_date)=2022 '''
     curr.execute(Query_8)
-    my_db.commit()
     T8=curr.fetchall()
     df8=pd.DataFrame(T8,columns=['VideoTitle','PublishedDate','Channel Name'])
     st.write(df8)
@@ -972,7 +964,6 @@ elif Question=="9. Average Duration of all Videos in each channel":
     Query_9='''select channel_name as ChannelName,avg(Duration) as Duration
             from videos_de group by channel_name '''
     curr.execute(Query_9)
-    my_db.commit()
     T9=curr.fetchall()
     df9=pd.DataFrame(T9,columns=['Channel Name','Average Duration'])
 
@@ -989,6 +980,9 @@ elif Question=="10. Videos with highest number of comments":
     Query_10='''select title as videotitle,channel_name as Channel Name,comments as Comments from videos_de 
     where comments is not null order by comments desc'''
     curr.execute(Query_10)
-    my_db.commit()
     T10=curr.fetchall()
     df10=pd.DataFrame(T10,columns=['Video Title','Channel Name','Comments'])
+
+# Close the cursor and the connection
+curr.close()
+my_db.close()
