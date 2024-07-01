@@ -334,125 +334,123 @@ elif page=="Video Data":
 elif page=="Comment Data":
     Playlist_Data=fetch_comment_data()
 
-col1,col2=st.columns(2)
-with col1:
-    Question=st.selectbox("Select the Question",("1.What are the names of all the videos and their corresponding channels?",
-                            "2.Which channel have the most number of videos and how many vidoes do they have?",
-                            "3.What are the top 10 most viewed videos and their respective channels?",
-                            "4.How many comments were made on each video, and what are their names?",
-                            "5.Which videos have the highest number of likes, and what are their channel names",
-                            "6.What is the total number of likes and dislikes for each video, and what are video name",
-                            "7.What is the total number of views for each channel, and what are their channel name",
-                            "8.What are the names of all the channels that have published videos in the year 2022?",
-                            "9.What is the average duration of all videos in each channel, and what are their channel name",
-                            "10.Which videos have the highest number of comments, and what are their channel names"))
+Question=st.selectbox("Select the Question",("1.What are the names of all the videos and their corresponding channels?",
+                        "2.Which channel have the most number of videos and how many vidoes do they have?",
+                        "3.What are the top 10 most viewed videos and their respective channels?",
+                        "4.How many comments were made on each video, and what are their names?",
+                        "5.Which videos have the highest number of likes, and what are their channel names",
+                        "6.What is the total number of likes and dislikes for each video, and what are video name",
+                        "7.What is the total number of views for each channel, and what are their channel name",
+                        "8.What are the names of all the channels that have published videos in the year 2022?",
+                        "9.What is the average duration of all videos in each channel, and what are their channel name",
+                        "10.Which videos have the highest number of comments, and what are their channel names"))
 
-    if Question=="1.What are the names of all the videos and their corresponding channels?":
-        query='''select channel_name as "Channel_Name",Title as "Video_Name" from videos_de'''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-        df=pd.DataFrame(A,columns=("Channel_Name","Video_Name"))
+if Question=="1.What are the names of all the videos and their corresponding channels?":
+    query='''select channel_name as "Channel_Name",Title as "Video_Name" from videos_de'''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
+    df=pd.DataFrame(A,columns=("Channel_Name","Video_Name"))
+    st.write('Answer',df)
+elif Question=="2.Which channel have the most number of videos and how many vidoes do they have?":
+    query='''select channel_name as "Channel_Name",Videos_Count from channel_det order by Videos_Count desc '''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
+    col1,col2=st.columns(2)
+    with col1:
+        df=pd.DataFrame(A,columns=("Channel_Name","Video_Count"))
         st.write('Answer',df)
-    elif Question=="2.Which channel have the most number of videos and how many vidoes do they have?":
-        query='''select channel_name as "Channel_Name",Videos_Count from channel_det order by Videos_Count desc '''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-        col1,col2=st.columns(2)
-        with col1:
-            df=pd.DataFrame(A,columns=("Channel_Name","Video_Count"))
-            st.write('Answer',df)
-        col1,col2=st.columns(2)
-        with col1:
-            vis=px.bar(df,x="Channel_Name",y="Video_Count",title="Channel Videos Count",height=600,width=550)
-            st.plotly_chart(vis)
-    elif Question=="3.What are the top 10 most viewed videos and their respective channels?":
-        query='''select channel_name as "Channel_Name",Views from channel_det order by Views desc'''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-        col1,col2=st.columns(2)
-        with col1:
-            df=pd.DataFrame(A,columns=("Channel_Name","Views"))
-            st.write('Answer',df)
-        col1,col2=st.columns(2)
-        with col1:
-            vis=px.bar(df,x="Channel_Name",y="Views",title="Channel Views",
-                        height=600,width=550)
-            st.plotly_chart(vis)
-
-    elif Question=="4.How many comments were made on each video, and what are their names?":
-        query='''select channel_name as "Channel_Name",Video_id,Title as "Video Title",Comments as "Number of Comments" from videos_de order by Comments desc'''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-
-        df=pd.DataFrame(A,columns=("Channel_Name","Video_ID","Video Title","Number of Comments"))
+    col1,col2=st.columns(2)
+    with col1:
+        vis=px.bar(df,x="Channel_Name",y="Video_Count",title="Channel Videos Count",height=600,width=550)
+        st.plotly_chart(vis)
+elif Question=="3.What are the top 10 most viewed videos and their respective channels?":
+    query='''select channel_name as "Channel_Name",Views from channel_det order by Views desc'''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
+    col1,col2=st.columns(2)
+    with col1:
+        df=pd.DataFrame(A,columns=("Channel_Name","Views"))
         st.write('Answer',df)
-        #Visualization
-        query_V='''select channel_name as "Channel_Name",Video_id,Title as "Video Title",Comments as 
-        "Number of Comments" from videos_de order by Comments desc limit 10'''
-        curr.execute(query_V)
-        V=curr.fetchall()
-        my_db.commit()
-        df_V=pd.DataFrame(V,columns=("Channel_Name","Video_ID","Video Title","Number of Comments"))
-        vis=px.bar(df_V,x="Channel_Name",y="Number of Comments",hover_name="Video Title",title="Top Comments Chart",
-                            height=600,width=550)
+    col1,col2=st.columns(2)
+    with col1:
+        vis=px.bar(df,x="Channel_Name",y="Views",title="Channel Views",
+                    height=600,width=550)
         st.plotly_chart(vis)
 
-    elif Question=="5.Which videos have the highest number of likes, and what are their channel names":
-        query='''select channel_name as "Channel_Name",Likes from videos_de order by Likes desc'''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-        df=pd.DataFrame(A,columns=("Channel_Name","Likes"))
-        st.write('Answer',df)
-    elif Question=="6.What is the total number of likes and dislikes for each video, and what are video name":
-        query='''select channel_name as "Channel_Name",Title as "Video Name",Likes from videos_de'''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-        df=pd.DataFrame(A,columns=("Channel_Name","Video Name","Likes"))
-        st.write('Answer',df)
-    elif Question=="7.What is the total number of views for each channel, and what are their channel name":
-        query='''select channel_name as "Channel_Name",Views as "View Count" from channel_det'''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-        df=pd.DataFrame(A,columns=("Channel_Name","View Count"))
-        st.write('Answer',df)
-    elif Question=="8.What are the names of all the channels that have published videos in the year 2022?":
-        query='''select Title as Videotitle,Published_Date as "Video_Published_Date",Channel_Name as ChannelName 
-                from videos_de where extract(year from Published_Date)=2022 '''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-        df=pd.DataFrame(A,columns=("Video name","Video_Published_Date","Channel Name"))
-        st.write('Answer',df)
-    elif Question=="9.What is the average duration of all videos in each channel, and what are their channel name":
-        query='''select Channel_Name,Title as "Video Title",avg(Duration) from videos_de group by Channel_Name '''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-        df=pd.DataFrame(A,columns=("Channel Name","Video Title","Duration"))
-        st.write('Answer',df)
-    elif Question=="10.Which videos have the highest number of comments, and what are their channel names":
-        query='''select Title as "Video Title",Channel_Name as "Channel Name",Comments as Comments from videos_de
-        where Comments is not null order by Comments desc'''
-        curr.execute(query)
-        A=curr.fetchall()
-        my_db.commit()
-        df=pd.DataFrame(A,columns=("Video Title","Channel Name","Comments"))
-        st.write('Answer',df)
+elif Question=="4.How many comments were made on each video, and what are their names?":
+    query='''select channel_name as "Channel_Name",Video_id,Title as "Video Title",Comments as "Number of Comments" from videos_de order by Comments desc'''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
 
-        #Visualization
-        query_V='''select Title as "Video Title",Channel_Name as "Channel Name",Comments as Comments from videos_de
-        where Comments is not null order by Comments desc limit 10'''
-        curr.execute(query_V)
-        V=curr.fetchall()
-        my_db.commit()
-        df_V=pd.DataFrame(V,columns=("Video Title","Channel Name","Comments"))
-        vis=px.bar(df_V,x="Channel Name",y="Comments",hover_name="Video Title",title="Top Comments Count",
+    df=pd.DataFrame(A,columns=("Channel_Name","Video_ID","Video Title","Number of Comments"))
+    st.write('Answer',df)
+    #Visualization
+    query_V='''select channel_name as "Channel_Name",Video_id,Title as "Video Title",Comments as 
+    "Number of Comments" from videos_de order by Comments desc limit 10'''
+    curr.execute(query_V)
+    V=curr.fetchall()
+    my_db.commit()
+    df_V=pd.DataFrame(V,columns=("Channel_Name","Video_ID","Video Title","Number of Comments"))
+    vis=px.bar(df_V,x="Channel_Name",y="Number of Comments",hover_name="Video Title",title="Top Comments Chart",
                         height=600,width=550)
-        st.plotly_chart(vis)
+    st.plotly_chart(vis)
+
+elif Question=="5.Which videos have the highest number of likes, and what are their channel names":
+    query='''select channel_name as "Channel_Name",Likes from videos_de order by Likes desc'''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
+    df=pd.DataFrame(A,columns=("Channel_Name","Likes"))
+    st.write('Answer',df)
+elif Question=="6.What is the total number of likes and dislikes for each video, and what are video name":
+    query='''select channel_name as "Channel_Name",Title as "Video Name",Likes from videos_de'''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
+    df=pd.DataFrame(A,columns=("Channel_Name","Video Name","Likes"))
+    st.write('Answer',df)
+elif Question=="7.What is the total number of views for each channel, and what are their channel name":
+    query='''select channel_name as "Channel_Name",Views as "View Count" from channel_det'''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
+    df=pd.DataFrame(A,columns=("Channel_Name","View Count"))
+    st.write('Answer',df)
+elif Question=="8.What are the names of all the channels that have published videos in the year 2022?":
+    query='''select Title as Videotitle,Published_Date as "Video_Published_Date",Channel_Name as ChannelName 
+            from videos_de where extract(year from Published_Date)=2022 '''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
+    df=pd.DataFrame(A,columns=("Video name","Video_Published_Date","Channel Name"))
+    st.write('Answer',df)
+elif Question=="9.What is the average duration of all videos in each channel, and what are their channel name":
+    query='''select Channel_Name,Title as "Video Title",avg(Duration) from videos_de group by Channel_Name '''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
+    df=pd.DataFrame(A,columns=("Channel Name","Video Title","Duration"))
+    st.write('Answer',df)
+elif Question=="10.Which videos have the highest number of comments, and what are their channel names":
+    query='''select Title as "Video Title",Channel_Name as "Channel Name",Comments as Comments from videos_de
+    where Comments is not null order by Comments desc'''
+    curr.execute(query)
+    A=curr.fetchall()
+    my_db.commit()
+    df=pd.DataFrame(A,columns=("Video Title","Channel Name","Comments"))
+    st.write('Answer',df)
+
+    #Visualization
+    query_V='''select Title as "Video Title",Channel_Name as "Channel Name",Comments as Comments from videos_de
+    where Comments is not null order by Comments desc limit 10'''
+    curr.execute(query_V)
+    V=curr.fetchall()
+    my_db.commit()
+    df_V=pd.DataFrame(V,columns=("Video Title","Channel Name","Comments"))
+    vis=px.bar(df_V,x="Channel Name",y="Comments",hover_name="Video Title",title="Top Comments Count",
+                    height=600,width=550)
+    st.plotly_chart(vis)
