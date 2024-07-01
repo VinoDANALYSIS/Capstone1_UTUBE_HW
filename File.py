@@ -456,11 +456,3 @@ with col1:
         vis=px.bar(df_V,x="Channel Name",y="Comments",hover_name="Video Title",title="Top Comments Count",
                         height=600,width=550)
         st.plotly_chart(vis)
-
-
-
-
-
-
-
-    
